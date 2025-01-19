@@ -1,59 +1,39 @@
-import { cloudStorage } from "@payloadcms/plugin-cloud-storage";
-import { s3Adapter } from "@payloadcms/plugin-cloud-storage/s3";
-import seo from "@payloadcms/plugin-seo";
-import { GenerateTitle } from "@payloadcms/plugin-seo/dist/types";
-import path from "path";
-import { buildConfig } from "payload/config";
-import Categories from "./collections/Categories";
-import Contents from "./collections/Contents";
-import Layouts from "./collections/Layouts";
-import Media from "./collections/Media";
-import Pages from "./collections/Pages";
-import Tags from "./collections/Tags";
-import Users from "./collections/Users";
-const generateTitle: GenerateTitle = ({ slug, doc }) => {
-  let title = "TurboPress";
-  if (slug == "pages") {
-    const page = doc as any;
-    return (title = `TurboPress - ${page?.title?.value}`);
-  }
-  return title;
-};
+// storage-adapter-import-placeholder
+import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
+import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import path from 'path'
+import { buildConfig } from 'payload'
+import { fileURLToPath } from 'url'
+import sharp from 'sharp'
 
-const adapter = s3Adapter({
-  config: {
-    credentials: {
-      accessKeyId: process.env.S3_ACCESS_KEY_ID,
-      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    },
-    region: process.env.S3_REGION,
-    endpoint: process.env.S3_ENDPOINT,
-  },
-  bucket: process.env.S3_BUCKET,
-});
+import { Users } from './collections/Users'
+import { Media } from './collections/Media'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL ?? "http://localhost:3000",
   admin: {
     user: Users.slug,
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
   },
-  collections: [Categories, Contents, Layouts, Media, Pages, Tags, Users],
+  collections: [Users, Media],
+  editor: lexicalEditor(),
+  secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
-    outputFile: path.join(__dirname, "../types", "payload.ts"),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  db: vercelPostgresAdapter({
+    pool: {
+      connectionString: process.env.POSTGRES_URL || '',
+    },
+  }),
+  sharp,
   plugins: [
-    seo({
-      collections: ["pages"],
-      uploadsCollection: "media",
-      generateTitle: generateTitle,
-    }),
-    cloudStorage({
-      collections: {
-        media: {
-          adapter: adapter,
-        },
-      },
-    }),
+    payloadCloudPlugin(),
+    // storage-adapter-placeholder
   ],
-  cors: "*",
-});
+})

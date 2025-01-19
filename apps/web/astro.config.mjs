@@ -1,24 +1,5 @@
-import mdx from "@astrojs/mdx";
-import node from "@astrojs/node";
-import svelte from "@astrojs/svelte";
-import tailwind from "@astrojs/tailwind";
+// @ts-check
+import { defineConfig } from 'astro/config';
 
-import { defineConfig } from "astro/config";
-
-export default defineConfig({
-  integrations: [mdx(), tailwind(), svelte()],
-  server: {
-    port: parseInt(process.env.ASTRO_PORT ?? "3000"),
-  },
-  output: "server",
-  adapter: node({
-    mode: "standalone",
-  }),
-  vite: {
-    define: {
-      "import.meta.env.PAYLOAD_PUBLIC_SERVER_URL": JSON.stringify(
-        process.env.PAYLOAD_PUBLIC_SERVER_URL,
-      ),
-    },
-  },
-});
+// https://astro.build/config
+export default defineConfig({});

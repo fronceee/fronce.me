@@ -1,18 +1,11 @@
 ---
-import MainLayout from "../layouts/MainLayout.astro";
-import { getPageSingle } from "../services/api";
+import Welcome from '../components/Welcome.astro';
+import Layout from '../layouts/Layout.astro';
 
-const homePage = await getPageSingle("home");
-
-const pageTitle = homePage?.meta?.title ?? homePage?.title ?? "TurboPress";
-
-const layout = homePage?.layout;
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<MainLayout
-  title={pageTitle}
-  {layout}
-  description={homePage?.meta?.description}
-  content={homePage?.content}
-  image={homePage?.meta?.image}
-/>
+<Layout>
+	<Welcome />
+</Layout>

@@ -1,14 +1,14 @@
-# TurboPress starter
+# Turborepo starter
 
-This is a starter Astro + Payload CMS project using Turborepo.
+This Turborepo starter is maintained by the Turborepo core team.
 
-## Why Astro?
+## Using this example
 
-Astro allow you to use your favorite UI components and libraries. Mix and match React, Preact, Svelte, Vue, SolidJS, AlpineJS, and Lit to build your own website.
+Run the following command:
 
-## Why PayloadCMS?
-
-I need a headless CMS that is easy to use with TypeScript support. PayloadCMS work really well in this use case.
+```sh
+npx create-turbo@latest
+```
 
 ## What's inside?
 
@@ -16,9 +16,11 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `api`: a [Payload](https://payloadcms.com/) app
-- `web`: an [Astro](https://astro.build/) app
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-prettier` and `eslint-configg-turbo`)
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -27,42 +29,56 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 This Turborepo has some additional tools already setup for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [TailwindCSS](https://tailwindcss.com/) for CSS utility
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
-## Prerequisites
+### Build
 
-Install `nodejs`, `pnpm` and `turborepo` on your local machine
+To build all apps and packages, run the following command:
 
-## Develop
+```
+cd my-turborepo
+pnpm build
+```
 
-Create a `.env` file in the root folder, you can use the `.env.example` file as an example
+### Develop
 
-I use `pnpm` for this project.
+To develop all apps and packages, run the following command:
 
-Run the following command:
-
-```sh
-pnpm installl
+```
+cd my-turborepo
 pnpm dev
 ```
 
-By default, the payloadCMS will run on port 3000, and Astro will be served on port 3001.
+### Remote Caching
 
-## Build & Serve (NodeJs)
+> [!TIP]
+> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
 
-```sh
-pnpm build
-pnpm serve
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+
+```
+cd my-turborepo
+npx turbo login
 ```
 
-## TypeScript support
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
 
-To fully utilize the type safe features, manually generate the types for PayloadCMS by runng `pnpm generate:types`
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
 
-Then, you can import the types easily as simple as
-
-```ts
-import type { User } from "@turbopress/api/types";
 ```
+npx turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
